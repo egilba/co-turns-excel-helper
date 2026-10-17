@@ -1,0 +1,24 @@
+CO-TURNS EXCEL HELPER — GITHUB PAGES PROTOTYPE 2
+
+Repository: https://github.com/egilba/co-turns-excel-helper
+Hosted URL: https://egilba.github.io/co-turns-excel-helper/
+
+WHAT THIS PACKAGE DOES
+This is a static HTTPS-hostable Excel task-pane add-in. It does NOT yet implement map/geographical search. It operates on eight fixed header names A–H in row 1 of the active worksheet and uses Excel Office.js. It does not include a new workbook; keep your existing v2 workbook.
+
+UPLOAD (GitHub website)
+1. Open https://github.com/egilba/co-turns-excel-helper
+2. Choose Add file > Upload files (or the + near the file list).
+3. UNZIP the package first on your computer. Upload index.html, taskpane.html, icon.png, and .nojekyll (optional) to the ROOT of the repository. You may also upload manifest.xml, but do not confuse it with the installation step.
+4. Click Commit changes. Wait a minute or two, then visit the hosted URL and check it shows the helper introduction.
+5. Check https://egilba.github.io/co-turns-excel-helper/taskpane.html loads (outside Excel it will show an error that it must run in Excel).
+
+INSTALL IN EXCEL (SEPARATE STEP)
+The manifest.xml is the installation/registration file pointing Excel to GitHub Pages. Merely hosting it does not install it in Excel. Installation may require a supported add-in sideload or catalog and may be restricted by your institution. Do not assume the 'My Add-ins' upload option is present in every Excel installation. Once installed, the helper opens as an Excel task pane. No Node.js or localhost is needed.
+
+IMPORTANT
+- Only code and public files should be published in this public GitHub repository. No research workbooks, participant data or credentials.
+- The manifest can be downloaded from GitHub; keep a local copy for sideloading.
+- This prototype cannot yet search geographic locations, edit earlier records via the helper, or automatically clear Class 2 if Class 1 changes.
+- Confirm requires any non-ID field; it does not enforce full research completeness.
+- Version updates need GitHub file updates; browser and Office caching may require reloading Excel.
