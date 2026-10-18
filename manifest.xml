@@ -1,4 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="TaskPaneApp">
-<Id>4ac8f074-bc64-4a57-ab21-951b550ae2a3</Id><Version>0.2.0.0</Version><ProviderName>Co-Turns</ProviderName><DefaultLocale>en-US</DefaultLocale><DisplayName DefaultValue="Co-Turns Excel Helper"/><Description DefaultValue="Record numbering and confirmation for the Co-Turns workbook."/><IconUrl DefaultValue="https://egilba.github.io/co-turns-excel-helper/icon.png"/><SupportUrl DefaultValue="https://egilba.github.io/co-turns-excel-helper/"/>
-<AppDomains><AppDomain>https://egilba.github.io/co-turns-excel-helper</AppDomain></AppDomains><Hosts><Host Name="Workbook"/></Hosts><DefaultSettings><SourceLocation DefaultValue="https://egilba.github.io/co-turns-excel-helper/taskpane.html"/></DefaultSettings><Permissions>ReadWriteDocument</Permissions></OfficeApp>
+<OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1" xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="TaskPaneApp">
+<Id>4ac8f074-bc64-4a57-ab21-951b550ae2a3</Id><Version>0.2.5.0</Version><ProviderName>Co-Turns</ProviderName><DefaultLocale>en-US</DefaultLocale><DisplayName DefaultValue="Co-Turns Excel Helper"/><Description DefaultValue="Record numbering and confirmation for the Co-Turns workbook."/><IconUrl DefaultValue="https://egilba.github.io/co-turns-excel-helper/icon.png"/><SupportUrl DefaultValue="https://egilba.github.io/co-turns-excel-helper/"/>
+<AppDomains><AppDomain>https://egilba.github.io/co-turns-excel-helper</AppDomain></AppDomains><Hosts><Host Name="Workbook"/></Hosts><DefaultSettings><SourceLocation DefaultValue="https://egilba.github.io/co-turns-excel-helper/taskpane.html?v=2.5"/></DefaultSettings><Permissions>ReadWriteDocument</Permissions><VersionOverrides xmlns="http://schemas.microsoft.com/office/taskpaneappversionoverrides" xsi:type="VersionOverridesV1_0">
+<Hosts><Host xsi:type="Workbook"><DesktopFormFactor>
+<FunctionFile resid="Commands.Url"/>
+<ExtensionPoint xsi:type="PrimaryCommandSurface"><OfficeTab id="TabHome"><Group id="CoTurns.Group"><Label resid="Group.Label"/>
+<Icon><bt:Image size="16" resid="Icon"/><bt:Image size="32" resid="Icon"/><bt:Image size="80" resid="Icon"/></Icon>
+<Control xsi:type="Button" id="CoTurns.ShowHelper"><Label resid="Button.Label"/><Supertip><Title resid="Button.Label"/><Description resid="Button.Tip"/></Supertip>
+<Icon><bt:Image size="16" resid="Icon"/><bt:Image size="32" resid="Icon"/><bt:Image size="80" resid="Icon"/></Icon>
+<Action xsi:type="ShowTaskpane"><TaskpaneId>CoTurns.Helper</TaskpaneId><SourceLocation resid="Taskpane.Url"/></Action>
+</Control></Group></OfficeTab></ExtensionPoint></DesktopFormFactor></Host></Hosts>
+<Resources><bt:Images><bt:Image id="Icon" DefaultValue="https://egilba.github.io/co-turns-excel-helper/icon.png"/></bt:Images>
+<bt:Urls><bt:Url id="Commands.Url" DefaultValue="https://egilba.github.io/co-turns-excel-helper/commands.html"/><bt:Url id="Taskpane.Url" DefaultValue="https://egilba.github.io/co-turns-excel-helper/taskpane.html?v=2.5"/></bt:Urls>
+<bt:ShortStrings><bt:String id="Group.Label" DefaultValue="Co-Turns"/><bt:String id="Button.Label" DefaultValue="Co-Turns Helper"/></bt:ShortStrings>
+<bt:LongStrings><bt:String id="Button.Tip" DefaultValue="Open the helper and resume your active record."/></bt:LongStrings></Resources>
+</VersionOverrides></OfficeApp>

@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Co-Turns Excel Helper</title><script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script><style>
 :root{font-family:Segoe UI,Arial,sans-serif;color:#152a40}*{box-sizing:border-box}body{margin:0;background:#f5f8fc;font-size:14px}.top{background:#19395f;color:white;padding:17px 18px}.top h1{font-size:19px;margin:0}.top small{color:#d4e0ed}.pad{padding:15px}.section{background:white;border:1px solid #dae3ec;border-radius:9px;padding:14px;margin-bottom:12px}h2{font-size:15px;margin:0 0 10px}label{display:block;font-weight:600;margin:10px 0 5px}input{width:100%;padding:9px;border:1px solid #98a9bc;border-radius:5px;font-size:14px}button{display:block;width:100%;padding:10px;margin:9px 0 0;border:0;border-radius:5px;background:#1a557c;color:white;font-weight:600;cursor:pointer}button.secondary{background:#e6eef6;color:#173652}button.danger{background:#a12b38}button:disabled{opacity:.5;cursor:default}.muted{color:#566575;font-size:12px;line-height:1.45}.status{white-space:pre-wrap;padding:10px;border-radius:5px;background:#e6eef6;line-height:1.45;margin:10px 0 0}.status.error{background:#fde6e9;color:#842b36}.status.ok{background:#e0f3e8;color:#1d5c39}.number{font-size:22px;font-weight:700;letter-spacing:1px;margin:8px 0}.footer{font-size:11px;color:#637286;padding:0 15px 14px}</style></head><body>
-<div class="top"><h1>Co-Turns Excel Helper</h1><small>Records and geography · Version 2.4</small></div><main class="pad"><div class="section"><h2>1. Identify contributor</h2><label for="initials">Your initials (2–4 letters)</label><input id="initials" maxlength="4" autocomplete="off" placeholder="e.g. EB"/><p class="muted">Your initials are remembered on this browser. Use your own unique initials. Numbering continues from the highest existing ID with those initials.</p></div><div class="section"><h2>2. Create new record</h2><button id="new">Create new record</button><div id="current" class="number">No active record</div><p class="muted">A new row is selected in Excel. Fill any desired fields in columns B–H, including the existing Class dropdowns.</p><button class="secondary" id="select" disabled>Go to active record</button></div><div class="section"><h2>3. Geography</h2>
+<div class="top"><h1>Co-Turns Excel Helper</h1><small>Records and geography · Version 2.5</small></div><main class="pad"><div class="section"><h2>1. Identify contributor</h2><label for="initials">Your initials (2–4 letters)</label><input id="initials" maxlength="4" autocomplete="off" placeholder="e.g. EB"/><p class="muted">Your initials are remembered on this browser. Use your own unique initials. Numbering continues from the highest existing ID with those initials.</p></div><div class="section"><h2>2. Create new record</h2><button id="new">Create new record</button><div id="current" class="number">No active record</div><p class="muted">A new row is selected in Excel. Fill any desired fields in columns B–H, including the existing Class dropdowns.</p><button class="secondary" id="select" disabled>Go to active record</button></div><div class="section"><h2>3. Geography</h2>
 <p class="muted">Select a cell in the record row in Excel, then load that row. Keep the source wording separate from the place chosen on the map.</p>
 <button id="loadGeo" class="secondary">Load selected record for geography</button>
 <p id="geoTarget" class="muted">No geography row selected.</p>
@@ -19,7 +19,7 @@
 <button id="useGeo">Save edited place or coordinates</button></div>
 <details style="margin-top:12px"><summary>Enter a known location manually</summary><p class="muted">Use this if search is unavailable or you already know the coordinates.</p><button id="manualGeo" class="secondary">Enter place and coordinates</button></details>
 <p class="muted">Search: Photon / komoot. Map data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap contributors</a>. Search runs only when you press Search; only the search text is sent to the place service.</p>
-</div><div class="section"><h2>4. Confirm or delete</h2><button id="confirm" disabled>Confirm active record</button><button class="danger" id="delete" disabled>Delete active record</button><div id="deleteCheck" hidden><p id="deleteQuestion"></p><button id="doDelete" class="danger">Yes, delete contents</button><button id="cancelDelete" class="secondary">Cancel</button></div><p class="muted">Confirmation requires information in at least one field besides Record ID. Deleting a new, unconfirmed record removes its provisional ID. Existing record IDs are retained.</p><div role="status" aria-live="polite" id="status" class="status">Opening in Excel…</div></div></main><div class="footer">Co-Turns helper 2.4 · Selecting a search result saves its place and coordinates. Review the full row, then confirm the record.</div>
+</div><div class="section"><h2>4. Confirm or delete</h2><button id="confirm" disabled>Confirm active record</button><button class="danger" id="delete" disabled>Delete active record</button><div id="deleteCheck" hidden><p id="deleteQuestion"></p><button id="doDelete" class="danger">Yes, delete contents</button><button id="cancelDelete" class="secondary">Cancel</button></div><p class="muted">Confirmation requires information in at least one field besides Record ID. Deleting a new, unconfirmed record removes its provisional ID. Existing record IDs are retained.</p><div role="status" aria-live="polite" id="status" class="status">Opening in Excel…</div></div></main><div class="footer">Co-Turns helper 2.5 · Selecting a search result saves its place and coordinates. Review the full row, then confirm the record.</div>
 <script>
 (() => {
 'use strict';
@@ -28,6 +28,29 @@ let activeRow=null, activeId=null, sheetName=null, working=false;
 let geoTarget=null, geoSearching=false, lastSearch=0;
 let provisionalRecord=null;
 const geoCache=new Map();
+const activeSetting='coTurns.activeRecord.v1';
+async function saveActiveRecord(){
+ const settings=Office.context.document.settings;
+ settings.set(activeSetting,activeId?{id:activeId,sheet:geoTarget.sheet,provisional:!!isProvisional()}:null);
+ await new Promise((resolve,reject)=>settings.saveAsync(result=>result.status===Office.AsyncResultStatus.Succeeded?resolve():reject(Error('Could not remember the active record. Keep the helper open and try again.'))));
+}
+async function restoreActiveRecord(){
+ const saved=Office.context.document.settings.get(activeSetting);
+ if(!saved||typeof saved.id!=='string'||typeof saved.sheet!=='string')return;
+ let found=null;
+ await Excel.run(async c=>{
+  const ws=c.workbook.worksheets.getItemOrNullObject(saved.sheet);ws.load('name');await c.sync();if(ws.isNullObject)return;
+  const used=ws.getUsedRangeOrNullObject(true);used.load('rowIndex,rowCount');await c.sync();if(used.isNullObject)return;
+  const ids=ws.getRange(`A2:A${Math.max(2,used.rowIndex+used.rowCount)}`);ids.load('values');await c.sync();
+  const matches=ids.values.map((v,i)=>String(v[0])===saved.id?i+2:null).filter(v=>v!==null);
+  if(matches.length!==1)return;
+  found={id:saved.id,row:matches[0],sheet:ws.name};ws.activate();ws.getRange('A'+found.row).select();await c.sync();
+ });
+ if(!found){Office.context.document.settings.set(activeSetting,null);status('Previous active record could not be located uniquely. Select the correct row and load it.','error');return;}
+ provisionalRecord=saved.provisional?found:null;
+ await loadGeography();status('Resumed '+activeId+'. Continue editing or confirm this record.','ok');
+}
+
 function status(s,kind=''){ $('status').textContent=s; $('status').className='status '+kind; }
 function buttons(){ $('new').disabled=working||!$('initials').value.trim()||!!activeId||geoSearching; $('confirm').disabled=working||geoSearching||!activeId; $('delete').disabled=working||geoSearching||!activeId; $('select').disabled=working||!activeId; $('loadGeo').disabled=working||geoSearching; $('searchGeo').disabled=working||geoSearching||!geoTarget; $('useGeo').disabled=working||geoSearching||!geoTarget; }
 function fitRow(ws,row){const range=ws.getRange(`A${row}:H${row}`);range.format.wrapText=true;range.format.autofitRows();}
@@ -36,7 +59,7 @@ function cleanInitials(){ const v=$('initials').value.toUpperCase().replace(/[^A
 async function excel(op){if(working)return;working=true;buttons();try{await op();}catch(e){status('Error: '+(e.message||String(e)),'error');}finally{working=false;buttons();}}
 function normalizeHeader(value){return String(value ?? '').replace(/\s+/g,' ').trim().toLowerCase();}
 function ensureHeaders(values){const expected=['Record ID','Location in source','Location on map','Geocodes','Dance name','Class 1','Class 2','Link'];for(let i=0;i<8;i++)if(normalizeHeader(values[0][i])!==normalizeHeader(expected[i]))throw Error('This does not appear to be the Co-Turns worksheet. Check the eight headings in row 1.');}
-Office.onReady(info=>{if(info.host!==Office.HostType.Excel){status('Open the helper inside Microsoft Excel.','error');return;} $('loadGeo').addEventListener('click',()=>excel(loadGeography));$('searchGeo').addEventListener('click',searchGeography);$('useGeo').addEventListener('click',()=>excel(saveGeography));$('manualGeo').addEventListener('click',()=>{if(!geoTarget){geoMessage('Load a record first.','error');return;}showLocation({name:'',lat:'',lon:''});});$('sourcePlace').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();searchGeography();}});$('placeQuery').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();searchGeography();}});$('initials').addEventListener('input',cleanInitials);$('new').addEventListener('click',()=>excel(createRecord));$('select').addEventListener('click',()=>excel(selectRecord));$('confirm').addEventListener('click',()=>excel(confirmRecord));$('delete').addEventListener('click',()=>{ $('deleteCheck').hidden=false;$('deleteQuestion').textContent='Delete '+activeId+'? '+(isProvisional()?'Its provisional ID will also be removed.':'Its ID will be retained.');});$('cancelDelete').addEventListener('click',()=>{$('deleteCheck').hidden=true;});$('doDelete').addEventListener('click',()=>{$('deleteCheck').hidden=true;excel(deleteRecord);});try{$('initials').value=localStorage.getItem('coTurns.initials')||'';}catch(e){}cleanInitials();status('Ready. Your initials will be remembered after you enter them.','ok');buttons();excel(async()=>{await Excel.run(async c=>{const ws=c.workbook.worksheets.getActiveWorksheet(),hdr=ws.getRange('A1:H1'),used=ws.getUsedRangeOrNullObject(true);hdr.load('values');used.load('rowIndex,rowCount');await c.sync();ensureHeaders(hdr.values);if(!used.isNullObject&&used.rowIndex+used.rowCount>1){const r=ws.getRange(`A2:H${used.rowIndex+used.rowCount}`);r.format.wrapText=true;r.format.autofitRows();}await c.sync();});});});
+Office.onReady(info=>{if(info.host!==Office.HostType.Excel){status('Open the helper inside Microsoft Excel.','error');return;} $('loadGeo').addEventListener('click',()=>excel(loadGeography));$('searchGeo').addEventListener('click',searchGeography);$('useGeo').addEventListener('click',()=>excel(saveGeography));$('manualGeo').addEventListener('click',()=>{if(!geoTarget){geoMessage('Load a record first.','error');return;}showLocation({name:'',lat:'',lon:''});});$('sourcePlace').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();searchGeography();}});$('placeQuery').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();searchGeography();}});$('initials').addEventListener('input',cleanInitials);$('new').addEventListener('click',()=>excel(createRecord));$('select').addEventListener('click',()=>excel(selectRecord));$('confirm').addEventListener('click',()=>excel(confirmRecord));$('delete').addEventListener('click',()=>{ $('deleteCheck').hidden=false;$('deleteQuestion').textContent='Delete '+activeId+'? '+(isProvisional()?'Its provisional ID will also be removed.':'Its ID will be retained.');});$('cancelDelete').addEventListener('click',()=>{$('deleteCheck').hidden=true;});$('doDelete').addEventListener('click',()=>{$('deleteCheck').hidden=true;excel(deleteRecord);});try{$('initials').value=localStorage.getItem('coTurns.initials')||'';}catch(e){}cleanInitials();status('Ready. Your initials will be remembered after you enter them.','ok');buttons();excel(async()=>{await Excel.run(async c=>{const ws=c.workbook.worksheets.getActiveWorksheet(),hdr=ws.getRange('A1:H1'),used=ws.getUsedRangeOrNullObject(true);hdr.load('values');used.load('rowIndex,rowCount');await c.sync();ensureHeaders(hdr.values);if(!used.isNullObject&&used.rowIndex+used.rowCount>1){const r=ws.getRange(`A2:H${used.rowIndex+used.rowCount}`);r.format.wrapText=true;r.format.autofitRows();}await c.sync();});await restoreActiveRecord();});});
 
 function geoMessage(message,kind=''){ $('geoStatus').textContent=message; $('geoStatus').className='status '+kind; }
 function safeCell(value){const text=String(value).trim();return /^[=+@-]/.test(text)?"'"+text:text;}
@@ -45,6 +68,7 @@ async function loadGeography(){
  await Excel.run(async c=>{const ws=c.workbook.worksheets.getActiveWorksheet();const sel=c.workbook.getSelectedRange();sel.load('rowIndex,rowCount');ws.load('id,name');const hdr=ws.getRange('A1:H1');hdr.load('values');await c.sync();ensureHeaders(hdr.values);if(sel.rowIndex<1||sel.rowCount!==1)throw Error('Select a cell in one record row below the headings.');const row=sel.rowIndex+1;const range=ws.getRange(`A${row}:D${row}`);range.load('values');await c.sync();values=range.values[0];if(!/^[A-Z]{2,4}-\d{4}$/.test(String(values[0])))throw Error('The selected row must have a Record ID.');target={sheet:ws.id,name:ws.name,row,id:String(values[0])};});
  geoTarget=target;activeId=target.id;activeRow=target.row;sheetName=target.name;$('current').textContent=target.id;$('geoTarget').textContent=`Editing ${target.id} · row ${target.row} · ${target.name}`;$('sourcePlace').value=String(values[1]||'');$('placeQuery').value='';$('geoResults').replaceChildren();$('geoPreview').hidden=true;
  const coords=String(values[3]||'').split(',').map(v=>v.trim());if(values[2]&&coords.length===2&&coords.every(v=>v!==''&&Number.isFinite(Number(v))))showLocation({name:String(values[2]),lat:coords[0],lon:coords[1]});
+ await saveActiveRecord();
  geoMessage('Record loaded. Enter a place name and search.','ok');
 }
 function showLocation(place){
@@ -86,9 +110,10 @@ async function selectFirstAvailable(ws,c){
  const empty=rows.values.findIndex(cells=>cells.every(v=>v===null||String(v).trim()===''));
  const next=empty>=0?empty+2:last+1;ws.getRange(`A${next}:H${next}`).select();await c.sync();
 }
-function finishRecord(message){
+async function finishRecord(message){
  if(isProvisional())provisionalRecord=null;
  geoTarget=null;activeId=null;activeRow=null;sheetName=null;
+ await saveActiveRecord();
  $('geoTarget').textContent='No geography row selected.';$('geoPreview').hidden=true;$('geoResults').replaceChildren();
  for(const key of ['sourcePlace','placeQuery','mappedPlace','latitude','longitude'])$(key).value='';
  $('current').textContent=message;$('deleteCheck').hidden=true;
@@ -101,14 +126,14 @@ async function confirmRecord(){
  if(String(r.values[0][0])!==activeId)throw Error('The Record ID has changed. Stop and inspect this row.');
  if(!r.values[0].slice(1).some(v=>v!==null&&String(v).trim()!==''))throw Error('Enter at least one field besides Record ID before confirming.');
  fitRow(ws,activeRow);await c.sync();await selectFirstAvailable(ws,c);});
- finishRecord('Confirmed '+done+'. Ready to create a new record.');
+ await finishRecord('Confirmed '+done+'. Ready to create a new record.');
 }
 async function deleteRecord(){
  if(!activeId)throw Error('No active record.');const done=activeId,removeId=isProvisional();
  await Excel.run(async c=>{const ws=c.workbook.worksheets.getItem(sheetName),id=ws.getRange('A'+activeRow);id.load('values');await c.sync();
  if(String(id.values[0][0])!==activeId)throw Error('The Record ID has changed. Nothing deleted.');
  ws.getRange(`${removeId?'A':'B'}${activeRow}:H${activeRow}`).clear(Excel.ClearApplyTo.contents);await c.sync();await selectFirstAvailable(ws,c);});
- finishRecord('Deleted '+done+(removeId?' including its provisional ID.':'; its ID remains reserved.')+' Ready to create a new record.');
+ await finishRecord('Deleted '+done+(removeId?' including its provisional ID.':'; its ID remains reserved.')+' Ready to create a new record.');
 }
 })();
 </script></body></html>
