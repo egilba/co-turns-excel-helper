@@ -11,7 +11,7 @@
 #classMessage{font-size:12px;line-height:1.3;margin:7px 0 0;min-height:16px}#classMessage.class-error{color:#842b36}
 #class2Prompt{margin:0;font-size:12px;color:#566575}
 </style></head><body>
-<div class="top"><h1>Co-Turns Excel Helper</h1><small>Records and geography · Version 2.8.1</small></div><main class="pad"><div class="section"><h2>1. Identify contributor</h2><label for="initials">Your initials (2–4 letters)</label><input id="initials" maxlength="4" autocomplete="off" placeholder="e.g. EB"/><p class="muted">Your initials are remembered on this browser. Use your own unique initials. Numbering continues from the highest existing ID with those initials.</p></div><div class="section"><h2>2. Create new record</h2><button id="new">Create new record</button><div id="current" class="number">No active record</div><p class="muted">A new row is selected in Excel. Fill any desired fields in columns B–H, using the compact classification buttons below or the worksheet dropdowns in columns F and G.</p><button class="secondary" id="select" disabled>Go to active record</button></div><div class="section"><h2>3. Geography</h2>
+<div class="top"><h1>Co-Turns Excel Helper</h1><small>Records and geography · Version 2.9</small></div><main class="pad"><div class="section"><h2>1. Identify contributor</h2><label for="initials">Your initials (2–4 letters)</label><input id="initials" maxlength="4" autocomplete="off" placeholder="e.g. EB"/><p class="muted">Your initials are remembered on this browser. Use your own unique initials. Numbering continues from the highest existing ID with those initials.</p></div><div class="section"><h2>2. Create new record</h2><button id="new">Create new record</button><div id="current" class="number">No active record</div><p class="muted">A new row is selected in Excel. Fill any desired fields in columns B–H, using the compact classification buttons below or the worksheet dropdowns in columns F and G.</p><button class="secondary" id="select" disabled>Go to active record</button></div><div class="section"><h2>3. Geography</h2>
 <p class="muted">Select a cell in the record row in Excel, then load that row. Keep the source wording separate from the place chosen on the map.</p>
 <button id="loadGeo" class="secondary">Load selected record for geography</button>
 <p id="geoTarget" class="muted">No geography row selected.</p>
@@ -30,7 +30,7 @@
 <button id="useGeo">Save edited place or coordinates</button></div>
 <details style="margin-top:12px"><summary>Enter a known location manually</summary><p class="muted">Use this if search is unavailable or you already know the coordinates.</p><button id="manualGeo" class="secondary">Enter place and coordinates</button></details>
 <p class="muted">Search: Photon / komoot. Map data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap contributors</a>. Search runs only when you press Search; only the search text is sent to the place service.</p>
-</div><div class="section class-section"><h2>4. Classification</h2><p id="classRecord">Select a record row in Excel</p><p id="classDetail"></p><button id="reloadClass" class="secondary" type="button">Load selected row</button><div class="class-label">Class 1</div><div id="class1Choices" class="class-grid" role="group" aria-label="Class 1 choices"></div><div class="class-label">Class 2</div><div id="class2Choices" class="class-grid" role="group" aria-label="Class 2 choices"></div><p id="class2Prompt">Choose Class 1 to see its Class 2 choices.</p><p id="classMessage" role="status" aria-live="polite">Select a record row to begin.</p></div><div class="section"><h2>5. Confirm or delete</h2><button id="confirm" disabled>Confirm active record</button><button class="danger" id="delete" disabled>Delete active record</button><div id="deleteCheck" hidden><p id="deleteQuestion"></p><button id="doDelete" class="danger">Yes, delete contents</button><button id="cancelDelete" class="secondary">Cancel</button></div><p class="muted">Confirmation requires information in at least one field besides Record ID. Deleting a new, unconfirmed record removes its provisional ID. Existing record IDs are retained.</p><div role="status" aria-live="polite" id="status" class="status">Opening in Excel…</div></div></main><div class="footer">Co-Turns helper 2.8.1 · Selecting a search result saves its place and coordinates. Review the full row, then confirm the record.</div>
+</div><div class="section"><h2>4. Dance name and source</h2><p id="detailRecord" class="muted">Select a record row in Excel</p><button id="loadDetails" class="secondary" type="button">Load selected row</button><label for="danceName">Dance name</label><input id="danceName" autocomplete="off"><label for="sourceLink">Link to source</label><input id="sourceLink" type="text" inputmode="url" placeholder="Paste the source or video link here"><button id="saveDetails" type="button">Save dance name and link</button><p id="detailMessage" role="status" aria-live="polite" class="muted">Load a record to begin.</p></div><div class="section class-section"><h2>5. Classification</h2><p id="classRecord">Select a record row in Excel</p><p id="classDetail"></p><button id="reloadClass" class="secondary" type="button">Load selected row</button><div class="class-label">Class 1</div><div id="class1Choices" class="class-grid" role="group" aria-label="Class 1 choices"></div><div class="class-label">Class 2</div><div id="class2Choices" class="class-grid" role="group" aria-label="Class 2 choices"></div><p id="class2Prompt">Choose Class 1 to see its Class 2 choices.</p><p id="classMessage" role="status" aria-live="polite">Select a record row to begin.</p></div><div class="section"><h2>6. Confirm or delete</h2><button id="confirm" disabled>Confirm active record</button><button class="danger" id="delete" disabled>Delete active record</button><div id="deleteCheck" hidden><p id="deleteQuestion"></p><button id="doDelete" class="danger">Yes, delete contents</button><button id="cancelDelete" class="secondary">Cancel</button></div><p class="muted">Confirmation requires information in at least one field besides Record ID. Deleting a new, unconfirmed record removes its provisional ID. Existing record IDs are retained.</p><div role="status" aria-live="polite" id="status" class="status">Opening in Excel…</div></div></main><div class="footer">Co-Turns helper 2.9 · Selecting a search result saves its place and coordinates. Review the full row, then confirm the record.</div>
 <script>
 (() => {
 'use strict';
@@ -63,7 +63,7 @@ async function restoreActiveRecord(){
 }
 
 function status(s,kind=''){ $('status').textContent=s; $('status').className='status '+kind; }
-function buttons(){ $('new').disabled=working||!$('initials').value.trim()||!!activeId||geoSearching; $('confirm').disabled=working||geoSearching||!activeId; $('delete').disabled=working||geoSearching||!activeId; $('select').disabled=working||!activeId; $('loadGeo').disabled=working||geoSearching; $('searchGeo').disabled=working||geoSearching||!geoTarget; $('useGeo').disabled=working||geoSearching||!geoTarget; renderClassification(); }
+function buttons(){renderDetails(); $('new').disabled=working||!$('initials').value.trim()||!!activeId||geoSearching; $('confirm').disabled=working||geoSearching||!activeId; $('delete').disabled=working||geoSearching||!activeId; $('select').disabled=working||!activeId; $('loadGeo').disabled=working||geoSearching; $('searchGeo').disabled=working||geoSearching||!geoTarget; $('useGeo').disabled=working||geoSearching||!geoTarget; renderClassification(); }
 const classChoices = {
  TW:[['ELE','Elementary twirling'],['AUG','Augmented twirling'],['B/F','Back and forwards'],['FRE','Free twirling'],['UNC','Unclassifiable']],
  WA:[['3PA','Three pace'],['1PA','One pace'],['MIX','Mixed'],['RET','Reduced turning'],['UNC','Unclassifiable']],
@@ -94,7 +94,7 @@ async function readClassificationRow(c){
  const row=sel.rowIndex+1,cells=ws.getRange(`A${row}:H${row}`);cells.load('values');await c.sync();
  const v=cells.values[0],id=String(v[0]||'').trim();
  if(!/^[A-Z]{2,4}-\d{4}$/.test(id))throw Error('Create a record first, or select a row with a Record ID.');
- return {sheet:ws.id,sheetName:ws.name,row,id,place:String(v[1]||''),dance:String(v[4]||''),c1:String(v[5]||'').trim().toUpperCase(),c2:String(v[6]||'').trim().toUpperCase()};
+ return {sheet:ws.id,sheetName:ws.name,row,id,place:String(v[1]||''),dance:String(v[4]||''),link:String(v[7]||''),c1:String(v[5]||'').trim().toUpperCase(),c2:String(v[6]||'').trim().toUpperCase()};
 }
 async function refreshClassification(message){
  const revision=++classRevision;classReading=true;classTarget=null;renderClassification();
@@ -132,6 +132,45 @@ async function chooseClassification(level,code){
   }catch(e){await refreshClassification();classMessage(e.message||'Classification was not saved.',true);throw e;}
  });
 }
+let detailTarget=null, detailSaving=false;
+function detailMessage(text,error=false){$('detailMessage').textContent=text;$('detailMessage').classList.toggle('class-error',error);}
+function renderDetails(){
+ $('detailRecord').textContent=detailTarget?detailTarget.id+' · row '+detailTarget.row:'Select a record row in Excel';
+ $('saveDetails').disabled=working||geoSearching||detailSaving||!detailTarget;
+ $('loadDetails').disabled=working||geoSearching||detailSaving;
+ $('danceName').disabled=$('sourceLink').disabled=detailSaving||!detailTarget;
+}
+async function loadDetails(){
+ if(detailSaving||working||geoSearching)return;
+ try{const target=await Excel.run(readClassificationRow);detailTarget=target;$('danceName').value=target.dance;$('sourceLink').value=target.link;detailMessage('Edit these fields, then press Save dance name and link.');}
+ catch(e){detailTarget=null;detailMessage(e.message,true);}
+ renderDetails();
+}
+async function saveDetails(){
+ if(!detailTarget||detailSaving||working||geoSearching)return;
+ const expected={...detailTarget},dance=$('danceName').value.trim(),link=$('sourceLink').value.trim();
+ detailSaving=true;renderDetails();
+ try{await excel(async()=>{
+  try{await Excel.run(async c=>{
+   const target=await readClassificationRow(c);
+   if(target.sheet!==expected.sheet||target.row!==expected.row||target.id!==expected.id)throw Error('The selected record changed. Load the selected row before saving.');
+   if(target.dance!==expected.dance||target.link!==expected.link)throw Error('The worksheet fields have changed. Load the selected row to review them before saving.');
+   const ws=c.workbook.worksheets.getItem(target.sheet);
+   ws.getRange('E'+target.row).values=[[safeCell(dance)]];
+   ws.getRange('H'+target.row).values=[[safeCell(link)]];
+   await c.sync();
+  });
+  detailTarget={...expected,dance,link};detailMessage(expected.id+': dance name and link saved.');
+  await refreshClassification();}catch(e){detailMessage(e.message,true);throw e;}
+ });}catch(e){detailMessage(e.message,true);}
+ finally{detailSaving=false;renderDetails();}
+}
+function initDetails(){
+ $('loadDetails').addEventListener('click',loadDetails);
+ $('saveDetails').addEventListener('click',saveDetails);
+ renderDetails();loadDetails();
+}
+
 function initClassification(){
  $('reloadClass').addEventListener('click',()=>refreshClassification());
  renderClassification();
@@ -147,7 +186,7 @@ function cleanInitials(){ const v=$('initials').value.toUpperCase().replace(/[^A
 async function excel(op){if(working)return;working=true;buttons();try{await op();}catch(e){status('Error: '+(e.message||String(e)),'error');}finally{working=false;buttons();}}
 function normalizeHeader(value){return String(value ?? '').replace(/\s+/g,' ').trim().toLowerCase();}
 function ensureHeaders(values){const expected=['Record ID','Location in source','Location on map','Geocodes','Dance name','Class 1','Class 2','Link'];for(let i=0;i<8;i++)if(normalizeHeader(values[0][i])!==normalizeHeader(expected[i]))throw Error('This does not appear to be the Co-Turns worksheet. Check the eight headings in row 1.');}
-Office.onReady(info=>{if(info.host!==Office.HostType.Excel){status('Open the helper inside Microsoft Excel.','error');return;} initClassification(); $('loadGeo').addEventListener('click',()=>excel(loadGeography));$('searchGeo').addEventListener('click',searchGeography);$('useGeo').addEventListener('click',()=>excel(saveGeography));$('manualGeo').addEventListener('click',()=>{if(!geoTarget){geoMessage('Load a record first.','error');return;}showLocation({name:'',lat:'',lon:''});});$('sourcePlace').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();searchGeography();}});$('placeQuery').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();searchGeography();}});$('initials').addEventListener('input',cleanInitials);$('new').addEventListener('click',()=>excel(createRecord));$('select').addEventListener('click',()=>excel(selectRecord));$('confirm').addEventListener('click',()=>excel(confirmRecord));$('delete').addEventListener('click',()=>{ $('deleteCheck').hidden=false;$('deleteQuestion').textContent='Delete '+activeId+'? '+(isProvisional()?'Its provisional ID will also be removed.':'Its ID will be retained.');});$('cancelDelete').addEventListener('click',()=>{$('deleteCheck').hidden=true;});$('doDelete').addEventListener('click',()=>{$('deleteCheck').hidden=true;excel(deleteRecord);});try{$('initials').value=localStorage.getItem('coTurns.initials')||'';}catch(e){}cleanInitials();status('Ready. Your initials will be remembered after you enter them.','ok');buttons();excel(async()=>{await Excel.run(async c=>{const ws=c.workbook.worksheets.getActiveWorksheet(),hdr=ws.getRange('A1:H1'),used=ws.getUsedRangeOrNullObject(true);hdr.load('values');used.load('rowIndex,rowCount');await c.sync();ensureHeaders(hdr.values);if(!used.isNullObject&&used.rowIndex+used.rowCount>1){const r=ws.getRange(`A2:H${used.rowIndex+used.rowCount}`);r.format.wrapText=true;r.format.autofitRows();}await c.sync();});await restoreActiveRecord();});});
+Office.onReady(info=>{if(info.host!==Office.HostType.Excel){status('Open the helper inside Microsoft Excel.','error');return;} initClassification();initDetails(); $('loadGeo').addEventListener('click',()=>excel(loadGeography));$('searchGeo').addEventListener('click',searchGeography);$('useGeo').addEventListener('click',()=>excel(saveGeography));$('manualGeo').addEventListener('click',()=>{if(!geoTarget){geoMessage('Load a record first.','error');return;}showLocation({name:'',lat:'',lon:''});});$('sourcePlace').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();searchGeography();}});$('placeQuery').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();searchGeography();}});$('initials').addEventListener('input',cleanInitials);$('new').addEventListener('click',()=>excel(createRecord));$('select').addEventListener('click',()=>excel(selectRecord));$('confirm').addEventListener('click',()=>excel(confirmRecord));$('delete').addEventListener('click',()=>{ $('deleteCheck').hidden=false;$('deleteQuestion').textContent='Delete '+activeId+'? '+(isProvisional()?'Its provisional ID will also be removed.':'Its ID will be retained.');});$('cancelDelete').addEventListener('click',()=>{$('deleteCheck').hidden=true;});$('doDelete').addEventListener('click',()=>{$('deleteCheck').hidden=true;excel(deleteRecord);});try{$('initials').value=localStorage.getItem('coTurns.initials')||'';}catch(e){}cleanInitials();status('Ready. Your initials will be remembered after you enter them.','ok');buttons();excel(async()=>{await Excel.run(async c=>{const ws=c.workbook.worksheets.getActiveWorksheet(),hdr=ws.getRange('A1:H1'),used=ws.getUsedRangeOrNullObject(true);hdr.load('values');used.load('rowIndex,rowCount');await c.sync();ensureHeaders(hdr.values);if(!used.isNullObject&&used.rowIndex+used.rowCount>1){const r=ws.getRange(`A2:H${used.rowIndex+used.rowCount}`);r.format.wrapText=true;r.format.autofitRows();}await c.sync();});await restoreActiveRecord();});});
 
 function geoMessage(message,kind=''){ $('geoStatus').textContent=message; $('geoStatus').className='status '+kind; }
 function safeCell(value){const text=String(value).trim();return /^[=+@-]/.test(text)?"'"+text:text;}
