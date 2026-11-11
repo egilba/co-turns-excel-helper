@@ -11,7 +11,7 @@
 #classMessage{font-size:12px;line-height:1.3;margin:7px 0 0;min-height:16px}#classMessage.class-error{color:#842b36}
 #class2Prompt{margin:0;font-size:12px;color:#566575}
 </style></head><body>
-<div class="top"><h1>Co-Turns Excel Helper</h1><small>Records and geography · Version 2.9</small></div><main class="pad"><div class="section"><h2>1. Identify contributor</h2><label for="initials">Your initials (2–4 letters)</label><input id="initials" maxlength="4" autocomplete="off" placeholder="e.g. EB"/><p class="muted">Your initials are remembered on this browser. Use your own unique initials. Numbering continues from the highest existing ID with those initials.</p></div><div class="section"><h2>2. Create new record</h2><button id="new">Create new record</button><div id="current" class="number">No active record</div><p class="muted">A new row is selected in Excel. Fill any desired fields in columns B–H, using the compact classification buttons below or the worksheet dropdowns in columns F and G.</p><button class="secondary" id="select" disabled>Go to active record</button></div><div class="section"><h2>3. Geography</h2>
+<div class="top"><h1>Co-Turns Excel Helper</h1><small>Records and geography · Version 2.9.1</small></div><main class="pad"><div class="section"><h2>1. Identify contributor</h2><label for="initials">Your initials (2–4 letters)</label><input id="initials" maxlength="4" autocomplete="off" placeholder="e.g. EB"/><p class="muted">Your initials are remembered on this browser. Use your own unique initials. Numbering continues from the highest existing ID with those initials.</p></div><div class="section"><h2>2. Create new record</h2><button id="new">Create new record</button><div id="current" class="number">No active record</div><p class="muted">A new row is selected in Excel. Fill any desired fields in columns B–H, using the compact classification buttons below or the worksheet dropdowns in columns F and G.</p><button class="secondary" id="select" disabled>Go to active record</button></div><div class="section"><h2>3. Geography</h2>
 <p class="muted">Select a cell in the record row in Excel, then load that row. Keep the source wording separate from the place chosen on the map.</p>
 <button id="loadGeo" class="secondary">Load selected record for geography</button>
 <p id="geoTarget" class="muted">No geography row selected.</p>
@@ -30,7 +30,7 @@
 <button id="useGeo">Save edited place or coordinates</button></div>
 <details style="margin-top:12px"><summary>Enter a known location manually</summary><p class="muted">Use this if search is unavailable or you already know the coordinates.</p><button id="manualGeo" class="secondary">Enter place and coordinates</button></details>
 <p class="muted">Search: Photon / komoot. Map data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap contributors</a>. Search runs only when you press Search; only the search text is sent to the place service.</p>
-</div><div class="section"><h2>4. Dance name and source</h2><p id="detailRecord" class="muted">Select a record row in Excel</p><button id="loadDetails" class="secondary" type="button">Load selected row</button><label for="danceName">Dance name</label><input id="danceName" autocomplete="off"><label for="sourceLink">Link to source</label><input id="sourceLink" type="text" inputmode="url" placeholder="Paste the source or video link here"><button id="saveDetails" type="button">Save dance name and link</button><p id="detailMessage" role="status" aria-live="polite" class="muted">Load a record to begin.</p></div><div class="section class-section"><h2>5. Classification</h2><p id="classRecord">Select a record row in Excel</p><p id="classDetail"></p><button id="reloadClass" class="secondary" type="button">Load selected row</button><div class="class-label">Class 1</div><div id="class1Choices" class="class-grid" role="group" aria-label="Class 1 choices"></div><div class="class-label">Class 2</div><div id="class2Choices" class="class-grid" role="group" aria-label="Class 2 choices"></div><p id="class2Prompt">Choose Class 1 to see its Class 2 choices.</p><p id="classMessage" role="status" aria-live="polite">Select a record row to begin.</p></div><div class="section"><h2>6. Confirm or delete</h2><button id="confirm" disabled>Confirm active record</button><button class="danger" id="delete" disabled>Delete active record</button><div id="deleteCheck" hidden><p id="deleteQuestion"></p><button id="doDelete" class="danger">Yes, delete contents</button><button id="cancelDelete" class="secondary">Cancel</button></div><p class="muted">Confirmation requires information in at least one field besides Record ID. Deleting a new, unconfirmed record removes its provisional ID. Existing record IDs are retained.</p><div role="status" aria-live="polite" id="status" class="status">Opening in Excel…</div></div></main><div class="footer">Co-Turns helper 2.9 · Selecting a search result saves its place and coordinates. Review the full row, then confirm the record.</div>
+</div><div class="section"><h2>4. Dance name and source</h2><p id="detailRecord" class="muted">Select a record row in Excel</p><button id="loadDetails" class="secondary" type="button">Load selected row</button><label for="danceName">Dance name</label><input id="danceName" autocomplete="off"><label for="sourceLink">Link to source</label><input id="sourceLink" autocomplete="off" type="text" inputmode="url" placeholder="Paste the source or video link here"><button id="saveDetails" type="button">Save dance name and link</button><p id="detailMessage" role="status" aria-live="polite" class="muted">Load a record to begin.</p></div><div class="section class-section"><h2>5. Classification</h2><p id="classRecord">Select a record row in Excel</p><p id="classDetail"></p><button id="reloadClass" class="secondary" type="button">Load selected row</button><div class="class-label">Class 1</div><div id="class1Choices" class="class-grid" role="group" aria-label="Class 1 choices"></div><div class="class-label">Class 2</div><div id="class2Choices" class="class-grid" role="group" aria-label="Class 2 choices"></div><p id="class2Prompt">Choose Class 1 to see its Class 2 choices.</p><p id="classMessage" role="status" aria-live="polite">Select a record row to begin.</p></div><div class="section"><h2>6. Confirm or delete</h2><button id="confirm" disabled>Confirm active record</button><button class="danger" id="delete" disabled>Delete active record</button><div id="deleteCheck" hidden><p id="deleteQuestion"></p><button id="doDelete" class="danger">Yes, delete contents</button><button id="cancelDelete" class="secondary">Cancel</button></div><p class="muted">Confirmation requires information in at least one field besides Record ID. Deleting a new, unconfirmed record removes its provisional ID. Existing record IDs are retained.</p><div role="status" aria-live="polite" id="status" class="status">Opening in Excel…</div></div></main><div class="footer">Co-Turns helper 2.9.1 · Selecting a search result saves its place and coordinates. Review the full row, then confirm the record.</div>
 <script>
 (() => {
 'use strict';
@@ -132,43 +132,71 @@ async function chooseClassification(level,code){
   }catch(e){await refreshClassification();classMessage(e.message||'Classification was not saved.',true);throw e;}
  });
 }
-let detailTarget=null, detailSaving=false;
+let detailTarget=null, detailSaving=false, detailReading=false, detailRevision=0;
 function detailMessage(text,error=false){$('detailMessage').textContent=text;$('detailMessage').classList.toggle('class-error',error);}
-function renderDetails(){
- $('detailRecord').textContent=detailTarget?detailTarget.id+' · row '+detailTarget.row:'Select a record row in Excel';
- $('saveDetails').disabled=working||geoSearching||detailSaving||!detailTarget;
- $('loadDetails').disabled=working||geoSearching||detailSaving;
- $('danceName').disabled=$('sourceLink').disabled=detailSaving||!detailTarget;
+function detailsDirty(){return !!detailTarget&&($('danceName').value!==detailTarget.dance||$('sourceLink').value!==detailTarget.link);}
+function clearDetails(message='Create a record or load the selected row.'){
+ ++detailRevision;detailReading=false;detailTarget=null;
+ $('danceName').value='';$('sourceLink').value='';detailMessage(message);renderDetails();
 }
-async function loadDetails(){
- if(detailSaving||working||geoSearching)return;
- try{const target=await Excel.run(readClassificationRow);detailTarget=target;$('danceName').value=target.dance;$('sourceLink').value=target.link;detailMessage('Edit these fields, then press Save dance name and link.');}
- catch(e){detailTarget=null;detailMessage(e.message,true);}
- renderDetails();
+function renderDetails(){
+ $('detailRecord').textContent=detailTarget?'Editing '+detailTarget.id+' · row '+detailTarget.row+' · '+detailTarget.sheetName:'No record loaded for dance name and link';
+ $('saveDetails').disabled=working||geoSearching||detailSaving||detailReading||!detailTarget||!detailsDirty();
+ $('loadDetails').disabled=working||geoSearching||detailSaving||detailReading;
+ $('danceName').disabled=$('sourceLink').disabled=working||geoSearching||detailSaving||detailReading||!detailTarget;
+}
+async function loadDetails(force=false,expected=null){
+ if(detailSaving||(!force&&(working||geoSearching)))return;
+ if(detailsDirty()){detailMessage('Unsaved edits for '+detailTarget.id+'. Save them before loading another row.',true);return;}
+ const revision=++detailRevision;detailReading=true;renderDetails();
+ try{
+  const target=await Excel.run(readClassificationRow);
+  if(revision!==detailRevision)return;
+  if(expected&&(target.sheet!==expected.sheet||target.row!==expected.row||target.id!==expected.id))throw Error('Selection changed. Select the record, then press Load selected row.');
+  detailTarget=target;$('danceName').value=target.dance;$('sourceLink').value=target.link;
+  detailMessage('Loaded from worksheet columns E and H. Edit, then press Save dance name and link.');
+ }catch(e){if(revision===detailRevision){detailTarget=null;$('danceName').value='';$('sourceLink').value='';detailMessage(e.message,true);}}
+ finally{if(revision===detailRevision){detailReading=false;renderDetails();}}
 }
 async function saveDetails(){
- if(!detailTarget||detailSaving||working||geoSearching)return;
+ if(!detailTarget||detailSaving||detailReading||working||geoSearching)return;
  const expected={...detailTarget},dance=$('danceName').value.trim(),link=$('sourceLink').value.trim();
+ const changeDance=$('danceName').value!==expected.dance,changeLink=$('sourceLink').value!==expected.link;
+ if(!changeDance&&!changeLink)return;
  detailSaving=true;renderDetails();
  try{await excel(async()=>{
-  try{await Excel.run(async c=>{
-   const target=await readClassificationRow(c);
-   if(target.sheet!==expected.sheet||target.row!==expected.row||target.id!==expected.id)throw Error('The selected record changed. Load the selected row before saving.');
-   if(target.dance!==expected.dance||target.link!==expected.link)throw Error('The worksheet fields have changed. Load the selected row to review them before saving.');
-   const ws=c.workbook.worksheets.getItem(target.sheet);
-   ws.getRange('E'+target.row).values=[[safeCell(dance)]];
-   ws.getRange('H'+target.row).values=[[safeCell(link)]];
-   await c.sync();
-  });
-  detailTarget={...expected,dance,link};detailMessage(expected.id+': dance name and link saved.');
-  await refreshClassification();}catch(e){detailMessage(e.message,true);throw e;}
- });}catch(e){detailMessage(e.message,true);}
- finally{detailSaving=false;renderDetails();}
+  try{let saved;
+   await Excel.run(async c=>{
+    const target=await readClassificationRow(c);
+    if(target.sheet!==expected.sheet||target.row!==expected.row||target.id!==expected.id)throw Error('Nothing saved: select '+expected.id+' in row '+expected.row+' before saving these edits.');
+    if((changeDance&&target.dance!==expected.dance)||(changeLink&&target.link!==expected.link))throw Error('Nothing saved: these worksheet fields changed after loading. Your typed edits remain here; compare them with columns E and H.');
+    const ws=c.workbook.worksheets.getItem(target.sheet);
+    if(changeDance)ws.getRange('E'+target.row).values=[[safeCell(dance)]];
+    if(changeLink)ws.getRange('H'+target.row).values=[[safeCell(link)]];
+    await c.sync();
+    const check=ws.getRange('A'+target.row+':H'+target.row);check.load('values');await c.sync();
+    const v=check.values[0];
+    if(String(v[0])!==target.id||(changeDance&&String(v[4]||'')!==dance)||(changeLink&&String(v[7]||'')!==link))throw Error('Could not verify the saved values. Check columns E and H before continuing.');
+    saved={...target,dance:String(v[4]||''),link:String(v[7]||'')};
+   });
+   detailTarget=saved;$('danceName').value=saved.dance;$('sourceLink').value=saved.link;
+   detailMessage(saved.id+': saved and checked in worksheet columns E and H.');
+   status(saved.id+': dance name and link saved and checked.','ok');await refreshClassification();
+  }catch(e){detailMessage(e.message,true);throw e;}
+ });}finally{detailSaving=false;renderDetails();}
+}
+function requireSavedDetails(){
+ if(detailReading||detailSaving)throw Error('Wait for dance name and link to finish loading or saving.');
+ if(detailsDirty()){
+  const message='Dance name or link has unsaved edits for '+detailTarget.id+'. Press Save dance name and link before confirming or changing the active record.';
+  detailMessage(message,true);$('saveDetails').scrollIntoView({behavior:'smooth',block:'center'});throw Error(message);
+ }
 }
 function initDetails(){
- $('loadDetails').addEventListener('click',loadDetails);
+ $('loadDetails').addEventListener('click',()=>loadDetails());
  $('saveDetails').addEventListener('click',saveDetails);
- renderDetails();loadDetails();
+ for(const id of ['danceName','sourceLink'])$(id).addEventListener('input',()=>{detailMessage('Unsaved edits for '+(detailTarget?.id||'this record')+'. Press Save dance name and link.');renderDetails();});
+ clearDetails();
 }
 
 function initClassification(){
@@ -191,11 +219,13 @@ Office.onReady(info=>{if(info.host!==Office.HostType.Excel){status('Open the hel
 function geoMessage(message,kind=''){ $('geoStatus').textContent=message; $('geoStatus').className='status '+kind; }
 function safeCell(value){const text=String(value).trim();return /^[=+@-]/.test(text)?"'"+text:text;}
 async function loadGeography(){
+ requireSavedDetails();
  let target,values;
  await Excel.run(async c=>{const ws=c.workbook.worksheets.getActiveWorksheet();const sel=c.workbook.getSelectedRange();sel.load('rowIndex,rowCount');ws.load('id,name');const hdr=ws.getRange('A1:H1');hdr.load('values');await c.sync();ensureHeaders(hdr.values);if(sel.rowIndex<1||sel.rowCount!==1)throw Error('Select a cell in one record row below the headings.');const row=sel.rowIndex+1;const range=ws.getRange(`A${row}:D${row}`);range.load('values');await c.sync();values=range.values[0];if(!/^[A-Z]{2,4}-\d{4}$/.test(String(values[0])))throw Error('The selected row must have a Record ID.');target={sheet:ws.id,name:ws.name,row,id:String(values[0])};});
  geoTarget=target;activeId=target.id;activeRow=target.row;sheetName=target.name;$('current').textContent=target.id;$('geoTarget').textContent=`Editing ${target.id} · row ${target.row} · ${target.name}`;$('sourcePlace').value=String(values[1]||'');$('placeQuery').value='';$('geoResults').replaceChildren();$('geoPreview').hidden=true;
  const coords=String(values[3]||'').split(',').map(v=>v.trim());if(values[2]&&coords.length===2&&coords.every(v=>v!==''&&Number.isFinite(Number(v))))showLocation({name:String(values[2]),lat:coords[0],lon:coords[1]});
  await saveActiveRecord();
+ await loadDetails(true,target);
  geoMessage('Record loaded. Enter a place name and search.','ok');
 }
 function showLocation(place){
@@ -225,7 +255,7 @@ async function saveGeography(){
  await Excel.run(async c=>{const ws=c.workbook.worksheets.getItem(target.sheet);const hdr=ws.getRange('A1:H1'),row=ws.getRange(`A${target.row}:D${target.row}`);hdr.load('values');row.load('values');await c.sync();ensureHeaders(hdr.values);if(String(row.values[0][0])!==target.id)throw Error('The target Record ID changed. Load the record again.');const updated=[safeCell(source),safeCell(mapped),`${lat}, ${lon}`];const cells=ws.getRange(`B${target.row}:D${target.row}`);cells.numberFormat=[['@','@','@']];cells.values=[updated];fitRow(ws,target.row);await c.sync();geoMessage('Geography saved to '+target.id+' (columns B–D).','ok');status('Geography saved to '+target.id+'.','ok');});
 }
 
-async function createRecord(){let initials=cleanInitials();if(initials.length<2)throw Error('Enter at least two initials.');let row, id, name;
+async function createRecord(){requireSavedDetails();let initials=cleanInitials();if(initials.length<2)throw Error('Enter at least two initials.');let row, id, name;
 await Excel.run(async context=>{const ws=context.workbook.worksheets.getActiveWorksheet();const hdr=ws.getRange('A1:H1');const used=ws.getUsedRangeOrNullObject(true);hdr.load('values');used.load('address,rowCount,rowIndex');ws.load('name');await context.sync();ensureHeaders(hdr.values);let last=Math.max(1,used.isNullObject?1:used.rowIndex+used.rowCount);const scan=ws.getRange(`A2:H${Math.max(2,last)}`);scan.load('values');await context.sync();let max=0;const re=new RegExp('^'+initials+'-(\\d{4})$');for(const [v] of scan.values){const match=String(v||'').trim().match(re);if(match)max=Math.max(max,Number(match[1]));}if(max>=9999)throw Error('The 4-digit numbering range is exhausted for these initials.');id=initials+'-'+String(max+1).padStart(4,'0');const empty=scan.values.findIndex(cells=>cells.every(v=>v===null||String(v).trim()===''));row=empty>=0?empty+2:Math.max(2,last+1);name=ws.name;const cell=ws.getRange('A'+row);cell.values=[[id]];cell.numberFormat=[['@']];fitRow(ws,row);ws.getRange(`A${row}:H${row}`).select();await context.sync();});
 activeRow=row;activeId=id;sheetName=name;provisionalRecord={id,row,sheet:name};await loadGeography();$('current').textContent=id;status('Created '+id+' in row '+row+'. Enter the other fields directly in the Excel sheet, then confirm.','ok');}
 async function selectRecord(){if(!activeId)throw Error('No active record.');await Excel.run(async c=>{const ws=c.workbook.worksheets.getItem(sheetName);ws.getRange('A'+activeRow+':H'+activeRow).select();await c.sync();});status('Selected row '+activeRow+'.');}
@@ -238,6 +268,7 @@ async function selectFirstAvailable(ws,c){
  const next=empty>=0?empty+2:last+1;ws.getRange(`A${next}:H${next}`).select();await c.sync();
 }
 async function finishRecord(message){
+ clearDetails();
  if(isProvisional())provisionalRecord=null;
  geoTarget=null;activeId=null;activeRow=null;sheetName=null;
  await saveActiveRecord();
@@ -248,6 +279,7 @@ async function finishRecord(message){
  $('new').scrollIntoView({behavior:'smooth',block:'center'});$('new').focus({preventScroll:true});
 }
 async function confirmRecord(){
+ requireSavedDetails();
  if(!activeId)throw Error('No active record.');const done=activeId;
  await Excel.run(async c=>{const ws=c.workbook.worksheets.getItem(sheetName),r=ws.getRange(`A${activeRow}:H${activeRow}`);r.load('values');await c.sync();
  if(String(r.values[0][0])!==activeId)throw Error('The Record ID has changed. Stop and inspect this row.');
@@ -256,6 +288,7 @@ async function confirmRecord(){
  await finishRecord('Confirmed '+done+'. Ready to create a new record.');
 }
 async function deleteRecord(){
+ requireSavedDetails();
  if(!activeId)throw Error('No active record.');const done=activeId,removeId=isProvisional();
  await Excel.run(async c=>{const ws=c.workbook.worksheets.getItem(sheetName),id=ws.getRange('A'+activeRow);id.load('values');await c.sync();
  if(String(id.values[0][0])!==activeId)throw Error('The Record ID has changed. Nothing deleted.');
